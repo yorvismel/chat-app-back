@@ -5,8 +5,13 @@ const path = require("path");
 
 const routerUser = require("./routerUser");
 const routerChatPersonal = require("./routeChat");
+const { createPersonalChat } = require("../controllers/controllerChat");
 
-router.use("/chat/personal", routerChatPersonal);
+router.post(
+  "/chat/personal/:userNameSend/:userNameReceiver",
+  createPersonalChat
+);
+
 router.use("/users", routerUser);
 
 module.exports = router;

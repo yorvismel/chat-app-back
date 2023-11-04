@@ -7,20 +7,24 @@ const {
 
 const router = Router();
 
-router.post("/:userName/:id", async (req, res) => {
-  const { message } = req.body;
-  const { id, userName } = req.params;
+router.post("/:userNameSend/:userNameReceiver", async (req, res) => {
+  const message = req.body.message;
+  const userNameSend = req.params.userNameSend;
+  const userNameReceiver = req.params.userNameReceiver;
 
   try {
-    if (!id || !message || !userName) {
+    console.log("userNameReceiver:", userNameReceiver);
+    console.log("Message:", message);
+    console.log("userNameSend:", userNameSend);
+
+    if (!userNameReceiver || !message || !userNameSend) {
       throw Error("Falta información para crear el chat personal.");
     }
 
     const newPersonalChat = await createPersonalChat({
-      id,
-
+      userNameSend,
       message,
-      userName,
+      userNameReceiver,
     });
 
     return res.status(200).json(newPersonalChat);

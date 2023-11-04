@@ -1,16 +1,29 @@
 const { ChatPersonal, Users } = require("../db.js");
 const { Op } = require("sequelize");
 
-const createPersonalChat = async ({ message, userName }) => {
+const createPersonalChat = async (req, res) => {
   try {
+    const { userNameSend, userNameReceiver } = req.params;
+    const { message } = req.body;
+
+    if (!userNameSend || !userNameReceiver || !message) {
+      return res
+        .status(400)
+        .json({ message: "Falta información para crear el chat personal." });
+    }
+
     const chatPersonal = await ChatPersonal.create({
       message,
-      userName,
+      userNameReceiver,
+      userNameSend,
     });
 
-    return chatPersonal;
+    return res.status(200).json(chatPersonal);
   } catch (error) {
-    res.status(500).json({ error: "Error de servidor" });
+    console.log(error);
+    return res
+      .status(500)
+      .json({ message: "Error al crear el chat personal." });
   }
 };
 

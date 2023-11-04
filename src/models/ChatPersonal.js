@@ -16,7 +16,11 @@ module.exports = (sequelize) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      userName: {
+      userNameSend: {
+        type: DataTypes.TEXT,
+        alowwNull: false,
+      },
+      userNameReceiver: {
         type: DataTypes.TEXT,
         alowwNull: false,
       },
