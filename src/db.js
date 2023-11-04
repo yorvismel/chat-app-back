@@ -6,13 +6,12 @@ const path = require("path");
 
 const { DB_USER, DB_PASSWORD, DB_HOST,  DB_NAME} = process.env;
 
-const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
-  {
-    logging: false,
-    native: false,
-  }
-);
+const dbURL = `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`;
+console.log("URL de conexión a la base de datos:", dbURL); // Agregar este log
+const sequelize = new Sequelize(dbURL, {
+  logging: false,
+  native: false,
+});
 
 // const sequelize = new Sequelize(DB_RENDER, {
 //   logging: false,
