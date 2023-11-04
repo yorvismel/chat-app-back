@@ -12,7 +12,7 @@ const sequelize = new Sequelize(dbURL, {
   logging: false,
   native: false,
 });
-
+ 
 // const sequelize = new Sequelize(DB_RENDER, {
 //   logging: false,
 //   native: false,
