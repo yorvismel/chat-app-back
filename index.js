@@ -16,9 +16,9 @@ const io = new Server(httpServer, {
   },
 });
 
-// conn.sync({ force: false }).then(() => {
-//   console.log("Base de datos conectada");
-// });
+conn.sync({ force: false }).then(() => {
+   console.log("Base de datos conectada");
+ });
 
 httpServer.listen(PORT, () => {
   console.log(`Servidor iniciado en ${PORT}`);
