@@ -27,25 +27,33 @@ const createPersonalChat = async (req, res) => {
   }
 };
 
-const getPersonalChatsByUsers = async (userName) => {
+const getAllChats = async (req, res) => {
   try {
-    const chats = await ChatPersonal.findAll({
-      where: {
-        [Op.or]: [{ userName: userName }],
-      },
-      include: [
-        { model: Users, as: "sender", attributes: ["userName"] },
-        { model: Users, as: "receiver", attributes: ["userName"] },
-      ],
+    const allChats = await ChatPersonal.findAll();
+
+    const formattedChats = allChats.map((chat) => {
+      const date = new Date(chat.createdAt);
+      const formattedDate = `${date.getHours()}:${String(
+        date.getMinutes()
+      ).padStart(2, "0")}`; // Formatea la fecha
+      return {
+        message: chat.message,
+        userNameSend:
+          chat.userNameSend || "Valor predeterminado si es undefined",
+        createdAt: formattedDate,
+      };
     });
-    console.log(chats);
-    return chats;
+
+    return res.status(200).json(formattedChats);
   } catch (error) {
     console.error(error);
+    return res
+      .status(500)
+      .json({ message: "Error al recuperar los chats personales." });
   }
 };
 
 module.exports = {
-  getPersonalChatsByUsers,
   createPersonalChat,
+  getAllChats,
 };

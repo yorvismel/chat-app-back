@@ -1,8 +1,9 @@
 const { Router } = require("express");
 const io = require("../../index.js");
 const {
-  getPersonalChatsByUsers,
+  
   createPersonalChat,
+  getAllChats
 } = require("../controllers/controllerChat.js");
 
 const router = Router();
@@ -36,23 +37,15 @@ router.post("/:userNameSend/:userNameReceiver", async (req, res) => {
   }
 });
 
-router.get("/:userName", async (req, res) => {
-  const userName = req.params.userName;
-
+router.get("/", async (req, res) => {
   try {
-    if (!userName) {
-      throw Error("Falta información para obtener el chat personal.");
-    }
-
-    const personalChats = await getPersonalChatsByUsers(userName);
-    console.log(personalChats);
-    return res.status(200).json(personalChats);
+    const allChats = await getAllChats(req, res); 
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({ message: "Error al obtener los chats personales." });
+    return res.status(500).json({ message: "Error al recuperar los chats." });
   }
 });
+
+
 
 module.exports = router;

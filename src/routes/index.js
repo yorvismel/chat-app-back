@@ -13,5 +13,6 @@ router.post(
 );
 
 router.use("/users", routerUser);
+router.use("/chats", routerChatPersonal);
 
 module.exports = router;

@@ -24,20 +24,19 @@ httpServer.listen(PORT, () => {
   console.log(`Servidor iniciado en ${PORT}`);
 });
 
-// io.on("connection", (socket) => {
-//   console.log(`Cliente conectado: ${socket.id}`);
-//   socket.emit("message", "Hola!");
+ io.on("connection", (socket) => {
+   console.log(`Cliente conectado: ${socket.id}`);
+   socket.emit("message", "Hola!");
+   socket.on("disconnect", () => {
+     console.log(`Cliente desconectado: ${socket.id}`);
+   });
+   socket.on("chat-message", (msg) => {
+     console.log(`Mensaje recibido: ${msg}`);
+     io.sockets.emit("broadcast-message", msg);
+   });
 
-//   socket.on("disconnect", () => {
-//     console.log(`Cliente desconectado: ${socket.id}`);
-//   });
-//   socket.on("chat-message", (msg) => {
-//     console.log(`Mensaje recibido: ${msg}`);
-//     io.sockets.emit("broadcast-message", msg);
-//   });
-
-//   socket.on("chat message", (message) => {
-//     console.log(`Mensaje recibido: ${message}`);
-//   });
-// });
+   socket.on("chat message", (message) => {
+     console.log(`Mensaje recibido: ${message}`);
+   });
+ });
  
