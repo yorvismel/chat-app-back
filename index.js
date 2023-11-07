@@ -1,4 +1,4 @@
-const { conn, Users } = require("./src/db.js");
+const { conn } = require("./src/db.js");
 require("dotenv").config();
 const express = require("express");
 const http = require("http");
@@ -17,26 +17,24 @@ const io = new Server(httpServer, {
 });
 
 conn.sync({ force: false }).then(() => {
-   console.log("Base de datos conectada");
- });
+  console.log("Base de datos conectada");
+});
 
 httpServer.listen(PORT, () => {
   console.log(`Servidor iniciado en ${PORT}`);
 });
 
- io.on("connection", (socket) => {
-   console.log(`Cliente conectado: ${socket.id}`);
-   socket.emit("message", "Hola!");
-   socket.on("disconnect", () => {
-     console.log(`Cliente desconectado: ${socket.id}`);
-   });
-   socket.on("chat-message", (msg) => {
-     console.log(`Mensaje recibido: ${msg}`);
-     io.sockets.emit("broadcast-message", msg);
-   });
+io.on("connection", (socket) => {
+  console.log(`Cliente conectado: ${socket.id}`);
+  socket.emit("message", "Hola!");
 
-   socket.on("chat message", (message) => {
-     console.log(`Mensaje recibido: ${message}`);
-   });
- });
- 
+  socket.on("disconnect", () => {
+    console.log(`Cliente desconectado: ${socket.id}`);
+  });
+
+  socket.on("chat message", (message) => {
+    console.log(`Mensaje recibido: ${message}`);
+    // Emitir el mensaje a todos los clientes, incluido el remitente
+    io.emit("chat message", message);
+  });
+});
