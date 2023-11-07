@@ -26,7 +26,7 @@ httpServer.listen(PORT, () => {
 
 io.on("connection", (socket) => {
   console.log(`Cliente conectado: ${socket.id}`);
-  socket.emit("message", "Hola!");
+  socket.emit("message", "Hola, te has conectado correctamente.");
 
   socket.on("disconnect", () => {
     console.log(`Cliente desconectado: ${socket.id}`);
