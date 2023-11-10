@@ -4,22 +4,22 @@ const { Sequelize } = require("sequelize");
 const fs = require("fs");
 const path = require("path");
 
-const { DB_URL , DB_URL_EXTERNAL} = process.env;
+const { DB_URL, DB_URL_EXTERNAL } = process.env;
 
-    //  const dbURL = DB_URL;
-    //   console.log("URL de conexión a la base de datos:", dbURL); // Agregar este log
-    //   const sequelize = new Sequelize(dbURL, {
-    //     logging: false,
-    //     native: false,
-    //   });
- 
-      const sequelize = new Sequelize(DB_URL_EXTERNAL, {
-         logging: false,
-         native: false,
-         dialectOptions: {
-           ssl: true, // Deshabilitar la conexión SSL/TLS
-         },
-       });
+// const dbURL = DB_URL;
+//  console.log("URL de conexión a la base de datos:", dbURL); // Agregar este log
+//  const sequelize = new Sequelize(dbURL, {
+//    logging: false,
+//    native: false,
+//  });
+
+const sequelize = new Sequelize(DB_URL_EXTERNAL, {
+  logging: false,
+  native: false,
+  dialectOptions: {
+    ssl: true, // Deshabilitar la conexión SSL/TLS
+  },
+});
 
 const basename = path.basename(__filename);
 
