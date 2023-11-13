@@ -6,12 +6,12 @@ const path = require("path");
 
 const { DB_URL, DB_URL_EXTERNAL } = process.env;
 
-// const dbURL = DB_URL;
-//  console.log("URL de conexión a la base de datos:", dbURL); // Agregar este log
-//  const sequelize = new Sequelize(dbURL, {
-//    logging: false,
-//    native: false,
-//  });
+//  const dbURL = DB_URL;
+//   console.log("URL de conexión a la base de datos:", dbURL);
+//   const sequelize = new Sequelize(dbURL, {
+//     logging: false,
+//     native: false,
+//   });
 
 const sequelize = new Sequelize(DB_URL_EXTERNAL, {
   logging: false,

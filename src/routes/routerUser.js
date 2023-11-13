@@ -2,9 +2,10 @@ const { Router } = require("express");
 const {
   postUser,
   getAllUsers,
-  getUserById,
+
   updateUserById,
   deleteUserById,
+  getUserByName,
 } = require("../controllers/controllerUser");
 const router = Router();
 
@@ -42,15 +43,21 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
+router.get("/:userName", async (req, res) => {
+  const { userName } = req.params;
   try {
-    const userById = await getUserById(id);
-    if (userById.error) return res.status(404).json(userById);
+    const userByName = await getUserByName(userName);
 
-    return res.status(200).json(userById);
+    if (!userByName) {
+      return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    return res.status(200).json(userByName);
   } catch (error) {
-    return res.status(404).send("Usuario no encontrado");
+    console.error(error);
+    return res
+      .status(500)
+      .send("Error interno del servidor al obtener el usuario");
   }
 });
 

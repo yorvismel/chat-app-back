@@ -1,29 +1,29 @@
-const { ChatPersonal, Users } = require("../db.js");
+const { ChatPersonal } = require("../db.js");
 const { Op } = require("sequelize");
+const io = require("../../index.js");
+console.log("este es el io :", io);
+const { Users } = require("../db.js");
 
-const createPersonalChat = async (req, res) => {
+const createGroupChat = async (req, res) => {
   try {
-    const { userNameSend, userNameReceiver } = req.params;
+    const { userNameSend } = req.params;
     const { message } = req.body;
 
-    if (!userNameSend || !userNameReceiver || !message) {
+    if (!userNameSend || !message) {
       return res
         .status(400)
-        .json({ message: "Falta información para crear el chat personal." });
+        .json({ message: "Falta información para crear el chat grupal." });
     }
 
-    const chatPersonal = await ChatPersonal.create({
+    const chatGroup = await ChatPersonal.create({
       message,
-      userNameReceiver,
       userNameSend,
     });
 
-    return res.status(200).json(chatPersonal);
+    return res.status(200).json(chatGroup);
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({ message: "Error al crear el chat personal." });
+    return res.status(500).json({ message: "Error al crear el chat grupal." });
   }
 };
 
@@ -31,16 +31,32 @@ const getAllChats = async (req, res) => {
   try {
     const allChats = await ChatPersonal.findAll();
 
-    const formattedChats = allChats.map((chat) => {
-      const date = new Date(chat.createdAt);
-      const formattedDate = `${date.getHours()}:${String(
-        date.getMinutes()
-      ).padStart(2, "0")}`; // Formatea la fecha
+    const processedIds = new Set();
+
+    // Filtra los chats para evitar duplicados por ID
+    const filteredChats = allChats.filter((chat) => {
+      if (processedIds.has(chat.id)) {
+        return false; // Si el ID ya ha sido procesado, no incluirlo
+      }
+
+      processedIds.add(chat.id); // Agrega el ID al conjunto
+
+      return true; // Incluye el chat en la lista filtrada
+    });
+
+    // Formatea los chats
+    const formattedChats = filteredChats.map((chat) => {
+      const chatDate = new Date(chat.createdAt);
+
+      const hours = chatDate.getHours().toString().padStart(2, "0");
+      const minutes = chatDate.getMinutes().toString().padStart(2, "0");
+
+      const formattedTime = `${hours}:${minutes}`;
+
       return {
         message: chat.message,
-        userNameSend:
-          chat.userNameSend || "Valor predeterminado si es undefined",
-        createdAt: formattedDate,
+        userNameSend: chat.userNameSend,
+        createdAt: formattedTime,
       };
     });
 
@@ -49,11 +65,11 @@ const getAllChats = async (req, res) => {
     console.error(error);
     return res
       .status(500)
-      .json({ message: "Error al recuperar los chats personales." });
+      .json({ message: "Error al recuperar todos los chats personales." });
   }
 };
 
 module.exports = {
-  createPersonalChat,
+  createGroupChat,
   getAllChats,
 };

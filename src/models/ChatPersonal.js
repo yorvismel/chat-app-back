@@ -1,7 +1,6 @@
 const { DataTypes } = require("sequelize");
 const { v4: uuidv4 } = require("uuid");
 const uuid = uuidv4();
-
 module.exports = (sequelize) => {
   sequelize.define(
     "ChatPersonal",
@@ -18,11 +17,11 @@ module.exports = (sequelize) => {
       },
       userNameSend: {
         type: DataTypes.TEXT,
-        alowwNull: false,
+        allowNull: false, // Corregido el typo aquí
       },
       userNameReceiver: {
         type: DataTypes.TEXT,
-        alowwNull: false,
+        allowNull: true, // Corregido el typo aquí
       },
     },
     {

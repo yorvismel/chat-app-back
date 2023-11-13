@@ -1,4 +1,4 @@
-const { Users, ReportUser, Events, ReviewUser } = require("../db");
+const { Users } = require("../db");
 
 const postUser = async ({ userName }) => {
   try {
@@ -30,10 +30,10 @@ const getAllUsers = async () => {
   }
 };
 
-const getUserById = async (id) => {
+const getUserByName = async (userName) => {
   try {
     const user = await Users.findOne({
-      where: { id: id },
+      where: { userName: userName },
     });
 
     if (!user) {
@@ -76,7 +76,7 @@ const deleteUserById = async (id) => {
 module.exports = {
   postUser,
   getAllUsers,
-  getUserById,
+  getUserByName,
   updateUserById,
   deleteUserById,
 };
